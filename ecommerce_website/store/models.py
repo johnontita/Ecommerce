@@ -42,7 +42,7 @@ class Order(models.Model):
         'PAYMENT_FAILED','FAILED'
         'PAYMENT_COMPLETED','COMPLETED'
     ]
-    payment_status=models.Choices(max_length=1,choices=PAYMENT_CHOICES,default=PAYMENT_PENDING)
+    payment_status=models.CharField(max_length=1,choices=PAYMENT_CHOICES,default=PAYMENT_PENDING)
     #a customer having multiple orders
     customer=models.ForeignKey(Customer,on_delete=models.PROTECT)
 

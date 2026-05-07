@@ -4,6 +4,14 @@ from django.db import models
 class Collection(models.Model):
     title=models.CharField(max_length=255)
     description=models.TextField()
+    #resolving circular dependency
+    featured_product=models.ForeignKey('Product',on_delete=models.SET_NULL,null=True,related_name='+')
+
+class Promotion(models.Model):
+    description=models.CharField(max_length=255)
+    discount=models.DecimalField(decimal_places=2)
+    starting_date=models.DateTimeField(auto_now_add=True)
+    is_active=models.BooleanField(default=True)
    
     
 class Product(models.Model):
@@ -14,6 +22,8 @@ class Product(models.Model):
     last_update=models.DateTimeField(auto_now=True)
      #a collection to have multiple products:ONE TO MANY RELATIONSHIP
     collection=models.ForeignKey(Collection,on_delete=models.PROTECT)
+    #implementing may-to-many
+    promotions=models.ManyToManyField(Promotion)
 class Customer(models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)

@@ -9,7 +9,7 @@ class Collection(models.Model):
 
 class Promotion(models.Model):
     description=models.CharField(max_length=255)
-    discount=models.DecimalField(decimal_places=2)
+    discount=models.DecimalField(max_digits=6, decimal_places=2)
     starting_date=models.DateTimeField(auto_now_add=True)
     is_active=models.BooleanField(default=True)
    
@@ -17,7 +17,7 @@ class Promotion(models.Model):
 class Product(models.Model):
     title=models.CharField(max_length=255)
     description=models.TextField()
-    price=models.DecimalField(decimal_places=2)
+    price=models.DecimalField(max_digits=10, decimal_places=2)
     inventory=models.IntegerField()
     last_update=models.DateTimeField(auto_now=True)
      #a collection to have multiple products:ONE TO MANY RELATIONSHIP
@@ -38,11 +38,11 @@ class Order(models.Model):
     PAYMENT_COMPLETED='C'
     PAYMENT_FAILED='F'
     PAYMENT_CHOICES=[
-        'PAYMENT_PENDING','PENDING'
-        'PAYMENT_FAILED','FAILED'
-        'PAYMENT_COMPLETED','COMPLETED'
+        (PAYMENT_PENDING, 'Pending'),
+        (PAYMENT_FAILED, 'Failed'),
+        (PAYMENT_COMPLETED, 'Completed')
     ]
-    payment_status=models.CharField(max_length=1,choices=PAYMENT_CHOICES,default=PAYMENT_PENDING)
+    payment_status=models.CharField(max_length=1, choices=PAYMENT_CHOICES, default=PAYMENT_PENDING)
     #a customer having multiple orders
     customer=models.ForeignKey(Customer,on_delete=models.PROTECT)
 
@@ -64,8 +64,8 @@ class Cart(models.Model):
 
 class OrderItem(models.Model):
     # title=models.CharField(max_length=255)
-    Product=models.ForeignKey(Product,on_delete=models.PROTECT)
-    price=models.DecimalField(decimal_places=2)
+    product=models.ForeignKey(Product, on_delete=models.PROTECT)
+    price=models.DecimalField(max_digits=10, decimal_places=2)
     inventory=models.SmallIntegerField()
     #order having multiple items
     order=models.ForeignKey(Order,on_delete=models.PROTECT)
